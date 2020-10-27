@@ -3,26 +3,38 @@ import unittest
 import os
 from appium import webdriver
 from appium.webdriver.common.touch_action import TouchAction
-
-
 class DemoAppium():
     def setUp(self) :
-        str=f'{os.popen("pwd").read().rstrip()}/data/apps/ApiDemos-debug.apk'
-        print(str)
         desirecap={
             "device":"Android",
             "deviceName": "emulator-5554",
             "platformName": "Android",
             "appPackage": "io.appium.android.apis",
             "appActivity" : "io.appium.android.apis.ApiDemos",
-           # "app":str
         }
         self.driver=webdriver.Remote('http://127.0.0.1:4723/wd/hub',desirecap);
     def scrollDown(self):
+        """""
+        handler = self.driver.get_window_size();
+        print(handler)
+        """
         for i in range(9):
             touch=TouchAction(self.driver)
             touch.press(x=318,y=940).move_to(x=338,y=476).release().perform()
             time.sleep(5)
+    def scrollUp(self):
+        for i in range(9):
+            touch=TouchAction(self.driver)
+            touch.press(x=318,y=476).move_to(x=338,y=940).release().perform()
+            time.sleep(5)
+
+    def longPress(self,element):
+        touch = TouchAction(self.driver)
+        touch.long_press(element)
+        touch.perform()
+        print("Preesed long")
+    def closesession(self):
+        self.driver.close();
     def test_Assignment_task(self):
         self.setUp()
         self.driver.implicitly_wait(30)
@@ -65,6 +77,20 @@ class DemoAppium():
         textClock.click()
         print("clicked on textclock")
         """"Assignment2 task 8 """
-
+        time.sleep(10)
+        self.driver.back()
+        print("backed now")
+        self. scrollUp()
+        print("Scrolled Up")
+        expandableList=self.driver.find_element_by_xpath("//*[@text='Expandable Lists']")
+        expandableList.click()
+        print("click on the Expendable ")
+        customAdapter=self.driver.find_element_by_xpath("//*[@text='1. Custom Adapter']")
+        customAdapter.click()
+        print("Custom Adpater") ##
+        people = self.driver.find_element_by_xpath("//*[@text='People Names']")
+        self.longPress(people)
+        self.closesession()
+        print("close the Aappium driver session")
 ct=DemoAppium();
 ct.test_Assignment_task()
